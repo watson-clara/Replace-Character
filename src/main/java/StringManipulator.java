@@ -8,6 +8,7 @@ public class StringManipulator {
     static Boolean problemNone = false;
     static char newChar;
     static char oldChar;
+    static int index;
        /*
         what goes into main method may include:
         (1) logics that deal with user interaction
@@ -27,7 +28,7 @@ public class StringManipulator {
             
             validateString(stringInput);
         }
-        System.out.println("Enter your command (quit, print reverse, replace all, replace single, remove)");
+            System.out.println("Enter your command (quit, print reverse, replace all, replace single, remove)");
             stringManipulation = input.nextLine();
             problemNone = false;
             if (stringManipulation.equals("print reverse")){
@@ -48,9 +49,9 @@ public class StringManipulator {
                 problemNone = false;
                 while (problemNone == false){
                     int numChar = charOccurance(oldChar);
-                    validateOccurance(stringInput,oldChar,numChar);
+                    index = validateOccurance(stringInput,oldChar,numChar);
                 }
-                System.out.println(replaceSingle(stringInput,oldChar,newChar));
+                System.out.println(replaceSingle(stringInput,index,newChar));
             }else if (stringManipulation.equals("remove")){
                 while (problemNone == false){
                     oldChar = enterCharacter();
@@ -59,7 +60,9 @@ public class StringManipulator {
                 System.out.println(remove(stringInput,oldChar));
                 
             }else if (stringManipulation.equals("quit")) {
-            }else {
+                
+            }else { 
+                System.out.println("** ERROR - not a valid command program end **\n");
             }
            
     }
@@ -147,7 +150,7 @@ public class StringManipulator {
     public static int validateOccurance(String str, char c, int number) {
        Scanner input = new Scanner(System.in);	
     int length = str.length();
-    int nums[] = new int[number];
+    int nums[] = new int[str.length()];
     int count = 0;
     for(int i=0; i < length; i++){ 
         if(str.charAt(i) == c) {
@@ -156,14 +159,21 @@ public class StringManipulator {
         count++;
         }
     }
-            System.out.println(Arrays.toString(nums) + count);
-    if(nums[number-1] == 0){
-        System.out.print("** ERROR - The string does not contain that many " + c + "'s try again**");
-        boolean problemNone = false;
-    }else {		
-     boolean problemNone = true;
+    int newNums[] = new int[count];
+    for(int i=0; i < count; i++){
+        newNums[i] = nums[i];
     }
-    return nums[number-1];
+    int index;
+    if(number > count){
+        index = -1;
+        System.out.print("** ERROR - The string does not contain that many " + c + "'s try again **\n");
+        problemNone = false;
+    }else {		
+        index = newNums[number-1];
+        problemNone = true;
+    }
+    
+    return index;
 }
 
     // this method replace the character at index i with newChar
@@ -175,8 +185,7 @@ public class StringManipulator {
              return: gosawgo
     */
     public static String replaceSingle(String str, int i, char newChar) {
-        String s =String.valueOf(c);
-        str = str.substring(0,i)+newChar+str.substring(i);
+        str = str.substring(0,i)+newChar+str.substring(i+1);
         return str;
 
     }
@@ -214,7 +223,7 @@ public class StringManipulator {
     }
      public static int charOccurance(char c) {
         Scanner input = new Scanner(System.in);	
-        System.out.print("which " + c + " would you like to replace");
+        System.out.print("which " + c + " would you like to replace\n");
         int numChar = input.nextInt(); 
         return numChar;
     }
